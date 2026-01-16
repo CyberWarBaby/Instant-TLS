@@ -128,7 +128,7 @@ export default function DashboardPage() {
             <div className="flex-1">
               <h3 className="font-medium">Install the CLI</h3>
               <p className="text-sm text-muted-foreground mb-3">
-                Build from source (binary releases coming soon)
+                Install via Go (binary releases coming soon)
               </p>
               <div className="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm overflow-x-auto">
                 <div className="flex items-center justify-between">
@@ -145,16 +145,19 @@ export default function DashboardPage() {
               3
             </div>
             <div className="flex-1">
-              <h3 className="font-medium">Login with your token</h3>
+              <h3 className="font-medium">One-Time Setup</h3>
               <p className="text-sm text-muted-foreground mb-3">
-                Authenticate the CLI with your Personal Access Token
+                Run with sudo - this does everything: login, creates CA, and trusts it in Chrome/Firefox
               </p>
               <div className="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm">
                 <div className="flex items-center justify-between">
-                  <code>instanttls login</code>
-                  <CopyButton text="instanttls login" />
+                  <code>sudo instanttls setup</code>
+                  <CopyButton text="sudo instanttls setup" />
                 </div>
               </div>
+              <p className="text-xs text-muted-foreground mt-2">
+                You'll be prompted to enter your token during setup
+              </p>
             </div>
           </div>
 
@@ -164,14 +167,14 @@ export default function DashboardPage() {
               4
             </div>
             <div className="flex-1">
-              <h3 className="font-medium">Initialize your local CA</h3>
+              <h3 className="font-medium">Generate a Certificate</h3>
               <p className="text-sm text-muted-foreground mb-3">
-                Generate a trusted Certificate Authority for your machine
+                Create a certificate for your local domain
               </p>
               <div className="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm">
                 <div className="flex items-center justify-between">
-                  <code>instanttls init</code>
-                  <CopyButton text="instanttls init" />
+                  <code>instanttls cert myapp.local</code>
+                  <CopyButton text="instanttls cert myapp.local" />
                 </div>
               </div>
             </div>
@@ -183,15 +186,32 @@ export default function DashboardPage() {
               5
             </div>
             <div className="flex-1">
-              <h3 className="font-medium">Generate your first certificate</h3>
+              <h3 className="font-medium">Add Domain to /etc/hosts</h3>
               <p className="text-sm text-muted-foreground mb-3">
-                Create a wildcard certificate for local development
+                Point your domain to localhost
               </p>
               <div className="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm">
                 <div className="flex items-center justify-between">
-                  <code>instanttls cert "*.local.test"</code>
-                  <CopyButton text='instanttls cert "*.local.test"' />
+                  <code>echo "127.0.0.1 myapp.local" | sudo tee -a /etc/hosts</code>
+                  <CopyButton text='echo "127.0.0.1 myapp.local" | sudo tee -a /etc/hosts' />
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Step 6 */}
+          <div className="flex gap-4">
+            <div className="h-8 w-8 rounded-full bg-green-100 text-green-700 flex items-center justify-center text-sm font-medium">
+              ✓
+            </div>
+            <div className="flex-1">
+              <h3 className="font-medium">Done! Use Your Certificates</h3>
+              <p className="text-sm text-muted-foreground mb-3">
+                Your certificates are ready to use
+              </p>
+              <div className="bg-muted p-4 rounded-lg text-sm space-y-2">
+                <p><strong>Certificate:</strong> <code>~/.instanttls/certs/myapp.local/cert.pem</code></p>
+                <p><strong>Private Key:</strong> <code>~/.instanttls/certs/myapp.local/key.pem</code></p>
               </div>
             </div>
           </div>

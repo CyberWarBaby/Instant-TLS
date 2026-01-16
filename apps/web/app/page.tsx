@@ -54,24 +54,23 @@ export default function HomePage() {
       {/* Install Section */}
       <section id="install" className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-900 text-white">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-center mb-8">Install in Seconds</h2>
+          <h2 className="text-2xl font-bold text-center mb-8">3 Commands. That's It.</h2>
           <div className="bg-gray-800 rounded-lg p-6 font-mono">
             <div className="flex items-center gap-2 text-gray-400 mb-4">
               <Terminal className="h-4 w-4" />
               <span>Terminal</span>
             </div>
             <div className="space-y-2 text-green-400">
-              <p><span className="text-gray-500"># Install CLI (coming soon - for now, build from source)</span></p>
+              <p><span className="text-gray-500"># 1. Install the CLI</span></p>
               <p>$ go install github.com/CyberWarBaby/Instant-TLS/cli/cmd/instanttls@latest</p>
               <p>&nbsp;</p>
-              <p><span className="text-gray-500"># Login with your token</span></p>
-              <p>$ instanttls login</p>
+              <p><span className="text-gray-500"># 2. One-time setup (login + CA + trust all browsers)</span></p>
+              <p>$ sudo instanttls setup</p>
               <p>&nbsp;</p>
-              <p><span className="text-gray-500"># Initialize local CA</span></p>
-              <p>$ instanttls init</p>
+              <p><span className="text-gray-500"># 3. Generate certificate for any domain</span></p>
+              <p>$ instanttls cert myapp.local</p>
               <p>&nbsp;</p>
-              <p><span className="text-gray-500"># Generate wildcard certificate</span></p>
-              <p>$ instanttls cert "*.local.test"</p>
+              <p><span className="text-gray-500"># Done! Green lock in Chrome, Firefox, and more 🔒</span></p>
             </div>
           </div>
         </div>
