@@ -100,16 +100,16 @@ func main() {
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
-		AllowOriginFunc: func(origin string) bool {
-			// In production, rely on AllowOrigins list
-			if cfg.Env == "production" {
-				return false
-			}
-			// In development, allow any .local domain
+	}
+	
+	// In development, allow additional origins via function
+	if cfg.Env == "development" {
+		corsConfig.AllowOriginFunc = func(origin string) bool {
+			// Allow any .local domain
 			if strings.HasSuffix(origin, ".local") || strings.HasSuffix(origin, ".local:443") {
 				return true
 			}
-			// Allow localhost on any port in development
+			// Allow localhost on any port
 			if strings.HasPrefix(origin, "http://localhost") || strings.HasPrefix(origin, "https://localhost") {
 				return true
 			}
@@ -117,8 +117,9 @@ func main() {
 				return true
 			}
 			return false
-		},
+		}
 	}
+	
 	r.Use(cors.New(corsConfig))
 
 	// Initialize handlers

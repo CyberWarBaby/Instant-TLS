@@ -10,9 +10,11 @@
 .git
 .gitignore
 
-# Documentation (not needed for runtime)
-*.md
-!RAILWAY.md
+# Documentation (not needed for runtime, except RAILWAY.md)
+README.md
+CONTRIBUTING.md
+LICENSE.md
+CHANGELOG.md
 
 # Development directories
 .vscode

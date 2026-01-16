@@ -193,14 +193,14 @@ railway run ./api migrate up
 
 ## Monorepo Configuration
 
-This repository uses the following Railway configurations:
+This repository includes Railway/Nixpacks configuration files that help Railway's build system understand how to build each service:
 
-- `apps/api/railway.json` - API service configuration
-- `apps/api/nixpacks.toml` - API build configuration
-- `apps/web/railway.json` - Web service configuration
-- `apps/web/nixpacks.toml` - Web build configuration
+- `apps/api/railway.json` - API service build and deploy configuration
+- `apps/api/nixpacks.toml` - API build commands for Nixpacks
+- `apps/web/railway.json` - Web service build and deploy configuration
+- `apps/web/nixpacks.toml` - Web build commands for Nixpacks
 
-These files configure Nixpacks (Railway's build system) to properly build and deploy each service.
+**Note**: These configuration files are optional. Railway can auto-detect build commands for most projects, but these files provide explicit configuration for more reliable deployments and custom build settings (like restart policies).
 
 ## Custom Domains
 
