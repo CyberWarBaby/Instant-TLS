@@ -1,4 +1,13 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8081'
+// Use relative URL to go through Next.js API proxy
+// This avoids CORS and mixed content issues when using HTTPS
+const getApiUrl = () => {
+  if (typeof window !== 'undefined') {
+    // Client-side: use relative URL (goes through /app/api/[...path]/route.ts)
+    return '/api'
+  }
+  // Server-side: use direct API URL
+  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8081'
+}
 
 export interface User {
   id: string
@@ -33,6 +42,7 @@ class ApiClient {
   }
 
   private async request<T>(method: string, path: string, body?: unknown): Promise<T> {
+    const apiUrl = getApiUrl()
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
     }
@@ -41,7 +51,7 @@ class ApiClient {
       headers['Authorization'] = `Bearer ${this.authToken}`
     }
 
-    const response = await fetch(`${API_URL}${path}`, {
+    const response = await fetch(`${apiUrl}${path}`, {
       method,
       headers,
       body: body ? JSON.stringify(body) : undefined,
