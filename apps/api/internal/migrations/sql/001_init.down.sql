@@ -1,0 +1,4 @@
+-- Drop tables
+DROP TABLE IF EXISTS machines;
+DROP TABLE IF EXISTS tokens;
+DROP TABLE IF EXISTS users;
