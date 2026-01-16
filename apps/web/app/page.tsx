@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Shield, Terminal, Zap, CheckCircle } from 'lucide-react'
+import { Shield, Terminal, Zap, CheckCircle, ArrowRight, Code, Server, Settings } from 'lucide-react'
 
 export default function HomePage() {
   return (
@@ -14,6 +14,12 @@ export default function HomePage() {
               <span className="text-xl font-bold">InstantTLS</span>
             </div>
             <div className="flex items-center gap-4">
+              <Link href="#install" className="text-sm text-gray-600 hover:text-gray-900">
+                Install
+              </Link>
+              <Link href="#advanced" className="text-sm text-gray-600 hover:text-gray-900">
+                Advanced
+              </Link>
               <Link href="/login">
                 <Button variant="ghost">Login</Button>
               </Link>
@@ -28,51 +34,101 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 bg-green-50 text-green-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </span>
+            Zero code changes required
+          </div>
           <h1 className="text-5xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-            Trusted HTTPS Locally
-            <span className="text-primary"> with Zero Browser Warnings</span>
+            HTTPS in Seconds
+            <span className="text-primary"> Not Hours</span>
           </h1>
           <p className="mt-6 text-xl text-gray-600 max-w-2xl mx-auto">
-            InstantTLS generates trusted local certificates for development. 
-            No more clicking through security warnings.
+            Run your app on HTTP. InstantTLS handles HTTPS automatically.
+            Green lock in every browser, no configuration needed.
           </p>
           <div className="mt-10 flex justify-center gap-4">
             <Link href="/register">
               <Button size="lg" className="h-12 px-8">
                 Start Free
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
             <Link href="#install">
               <Button size="lg" variant="outline" className="h-12 px-8">
-                View Install
+                See How It Works
               </Button>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Install Section */}
+      {/* Main Install Section - The Easy Way */}
       <section id="install" className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-900 text-white">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-center mb-8">One Command Install. Really.</h2>
-          <div className="bg-gray-800 rounded-lg p-6 font-mono">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">The Simplest Way to Get HTTPS Locally</h2>
+            <p className="text-gray-400">No nginx, no code changes, no hassle. Just works.</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6 mb-12">
+            <div className="bg-gray-800/50 rounded-xl p-6 border border-gray-700">
+              <div className="h-10 w-10 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4">
+                <span className="text-blue-400 font-bold">1</span>
+              </div>
+              <h3 className="font-semibold mb-2">Install</h3>
+              <p className="text-gray-400 text-sm">One curl command installs everything</p>
+            </div>
+            <div className="bg-gray-800/50 rounded-xl p-6 border border-gray-700">
+              <div className="h-10 w-10 bg-purple-500/20 rounded-lg flex items-center justify-center mb-4">
+                <span className="text-purple-400 font-bold">2</span>
+              </div>
+              <h3 className="font-semibold mb-2">Setup</h3>
+              <p className="text-gray-400 text-sm">Trusts CA in all your browsers automatically</p>
+            </div>
+            <div className="bg-gray-800/50 rounded-xl p-6 border border-gray-700">
+              <div className="h-10 w-10 bg-green-500/20 rounded-lg flex items-center justify-center mb-4">
+                <span className="text-green-400 font-bold">3</span>
+              </div>
+              <h3 className="font-semibold mb-2">Serve</h3>
+              <p className="text-gray-400 text-sm">HTTPS proxy to your HTTP app</p>
+            </div>
+          </div>
+
+          <div className="bg-gray-800 rounded-xl p-6 font-mono border border-gray-700">
             <div className="flex items-center gap-2 text-gray-400 mb-4">
               <Terminal className="h-4 w-4" />
-              <span>Terminal</span>
+              <span className="text-sm">Terminal</span>
             </div>
-            <div className="space-y-2 text-green-400">
-              <p><span className="text-gray-500"># Install everything with one command</span></p>
-              <p>$ curl -fsSL https://raw.githubusercontent.com/CyberWarBaby/Instant-TLS/main/install.sh | bash</p>
-              <p>&nbsp;</p>
-              <p><span className="text-gray-500"># Or manual install:</span></p>
-              <p>$ go install github.com/CyberWarBaby/Instant-TLS/cli/cmd/instanttls@latest</p>
-              <p>$ sudo instanttls setup</p>
-              <p>&nbsp;</p>
-              <p><span className="text-gray-500"># Generate certificate for any domain</span></p>
-              <p>$ instanttls cert myapp.local</p>
-              <p>&nbsp;</p>
-              <p><span className="text-gray-500"># Done! Green lock in Chrome, Firefox, and more 🔒</span></p>
+            <div className="space-y-3 text-sm">
+              <div>
+                <p className="text-gray-500"># 1. Install (one-time)</p>
+                <p className="text-green-400">$ curl -fsSL https://raw.githubusercontent.com/CyberWarBaby/Instant-TLS/main/install.sh | bash</p>
+              </div>
+              <div className="pt-2">
+                <p className="text-gray-500"># 2. Add domain to hosts</p>
+                <p className="text-green-400">$ echo "127.0.0.1 myapp.local" | sudo tee -a /etc/hosts</p>
+              </div>
+              <div className="pt-2">
+                <p className="text-gray-500"># 3. Run your app on HTTP (any port)</p>
+                <p className="text-blue-400">$ node app.js &nbsp;&nbsp;<span className="text-gray-500"># listening on localhost:3000</span></p>
+              </div>
+              <div className="pt-2">
+                <p className="text-gray-500"># 4. Start HTTPS proxy</p>
+                <p className="text-green-400">$ sudo instanttls serve myapp.local --to localhost:3000</p>
+              </div>
+              <div className="pt-4 border-t border-gray-700 mt-4">
+                <p className="text-gray-400">✨ Now visit <span className="text-white font-semibold">https://myapp.local</span> - green lock! 🔒</p>
+              </div>
             </div>
+          </div>
+
+          <div className="mt-8 text-center">
+            <p className="text-gray-400 text-sm">
+              No sudo? Use <code className="bg-gray-800 px-2 py-1 rounded">--port 8443</code> instead
+            </p>
           </div>
         </div>
       </section>
@@ -80,41 +136,171 @@ export default function HomePage() {
       {/* Features */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">Everything You Need</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-xl border shadow-sm">
-              <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                <Shield className="h-6 w-6 text-primary" />
+          <h2 className="text-3xl font-bold text-center mb-4">Why InstantTLS?</h2>
+          <p className="text-center text-gray-600 mb-12">Everything you need for local HTTPS development</p>
+          <div className="grid md:grid-cols-4 gap-6">
+            <div className="bg-white p-6 rounded-xl border shadow-sm text-center">
+              <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                <Zap className="h-6 w-6 text-green-600" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">Local CA</h3>
-              <p className="text-gray-600">
-                Generate a local Certificate Authority trusted by your system and browsers.
+              <h3 className="font-semibold mb-2">Zero Config</h3>
+              <p className="text-gray-600 text-sm">
+                No code changes. Your app stays on HTTP.
               </p>
             </div>
-            <div className="bg-white p-6 rounded-xl border shadow-sm">
-              <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                <Zap className="h-6 w-6 text-primary" />
+            <div className="bg-white p-6 rounded-xl border shadow-sm text-center">
+              <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                <Shield className="h-6 w-6 text-blue-600" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">Wildcard Certs</h3>
-              <p className="text-gray-600">
-                Create *.local.test certificates for all your local development domains.
+              <h3 className="font-semibold mb-2">Trusted CA</h3>
+              <p className="text-gray-600 text-sm">
+                Auto-installs in Chrome, Firefox, and system.
               </p>
             </div>
-            <div className="bg-white p-6 rounded-xl border shadow-sm">
-              <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                <Terminal className="h-6 w-6 text-primary" />
+            <div className="bg-white p-6 rounded-xl border shadow-sm text-center">
+              <div className="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                <Terminal className="h-6 w-6 text-purple-600" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">Beautiful CLI</h3>
-              <p className="text-gray-600">
-                Polished command-line experience with colors, spinners, and clear output.
+              <h3 className="font-semibold mb-2">Beautiful CLI</h3>
+              <p className="text-gray-600 text-sm">
+                Colors, spinners, and clear output.
+              </p>
+            </div>
+            <div className="bg-white p-6 rounded-xl border shadow-sm text-center">
+              <div className="h-12 w-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                <Server className="h-6 w-6 text-orange-600" />
+              </div>
+              <h3 className="font-semibold mb-2">Any Framework</h3>
+              <p className="text-gray-600 text-sm">
+                Node, Python, Go, Ruby - anything.
               </p>
             </div>
           </div>
         </div>
       </section>
 
+      {/* Advanced Usage */}
+      <section id="advanced" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm font-medium mb-4">
+              <Settings className="h-4 w-4" />
+              Advanced Usage
+            </div>
+            <h2 className="text-3xl font-bold mb-4">Configure TLS Yourself</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Need more control? Generate certificates and configure your server manually.
+            </p>
+          </div>
+
+          <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
+            {/* Tab-like headers */}
+            <div className="grid md:grid-cols-3 border-b">
+              <div className="p-4 border-r bg-gray-50">
+                <div className="flex items-center gap-2">
+                  <Code className="h-5 w-5 text-green-600" />
+                  <span className="font-semibold">Node.js</span>
+                </div>
+              </div>
+              <div className="p-4 border-r bg-gray-50">
+                <div className="flex items-center gap-2">
+                  <Server className="h-5 w-5 text-blue-600" />
+                  <span className="font-semibold">Nginx</span>
+                </div>
+              </div>
+              <div className="p-4 bg-gray-50">
+                <div className="flex items-center gap-2">
+                  <Zap className="h-5 w-5 text-purple-600" />
+                  <span className="font-semibold">Caddy</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6">
+              {/* Generate cert command */}
+              <div className="mb-6">
+                <p className="text-sm text-gray-600 mb-2">First, generate a certificate:</p>
+                <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+                  $ instanttls cert myapp.local
+                </div>
+              </div>
+
+              {/* Code examples in tabs */}
+              <div className="grid md:grid-cols-3 gap-4">
+                {/* Node.js */}
+                <div className="bg-gray-900 rounded-lg p-4 font-mono text-xs overflow-x-auto">
+                  <p className="text-gray-500 mb-2">// Node.js</p>
+                  <pre className="text-green-400">{`const https = require('https');
+const fs = require('fs');
+
+https.createServer({
+  key: fs.readFileSync(
+    '~/.instanttls/certs/myapp.local/key.pem'
+  ),
+  cert: fs.readFileSync(
+    '~/.instanttls/certs/myapp.local/cert.pem'
+  )
+}, app).listen(443);`}</pre>
+                </div>
+
+                {/* Nginx */}
+                <div className="bg-gray-900 rounded-lg p-4 font-mono text-xs overflow-x-auto">
+                  <p className="text-gray-500 mb-2"># nginx.conf</p>
+                  <pre className="text-blue-400">{`server {
+  listen 443 ssl;
+  server_name myapp.local;
+
+  ssl_certificate
+    ~/.instanttls/certs/myapp.local/cert.pem;
+  ssl_certificate_key
+    ~/.instanttls/certs/myapp.local/key.pem;
+
+  location / {
+    proxy_pass http://localhost:3000;
+  }
+}`}</pre>
+                </div>
+
+                {/* Caddy */}
+                <div className="bg-gray-900 rounded-lg p-4 font-mono text-xs overflow-x-auto">
+                  <p className="text-gray-500 mb-2"># Caddyfile</p>
+                  <pre className="text-purple-400">{`myapp.local {
+  tls ~/.instanttls/certs/myapp.local/cert.pem
+      ~/.instanttls/certs/myapp.local/key.pem
+
+  reverse_proxy localhost:3000
+}`}</pre>
+                </div>
+              </div>
+
+              <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                <p className="text-amber-800 text-sm">
+                  <strong>💡 Tip:</strong> The <code className="bg-amber-100 px-1 rounded">instanttls serve</code> command 
+                  does all this automatically. Only use manual configuration if you need custom server settings.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Certificate paths */}
+          <div className="mt-8 bg-white rounded-xl border shadow-sm p-6">
+            <h3 className="font-semibold mb-4">Certificate Locations</h3>
+            <div className="grid md:grid-cols-2 gap-4 font-mono text-sm">
+              <div className="bg-gray-100 p-4 rounded-lg">
+                <p className="text-gray-500 text-xs mb-1">Certificate</p>
+                <p className="text-gray-900">~/.instanttls/certs/[domain]/cert.pem</p>
+              </div>
+              <div className="bg-gray-100 p-4 rounded-lg">
+                <p className="text-gray-500 text-xs mb-1">Private Key</p>
+                <p className="text-gray-900">~/.instanttls/certs/[domain]/key.pem</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Pricing */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-4">Simple Pricing</h2>
           <p className="text-center text-gray-600 mb-12">Start free, upgrade when you need more.</p>
