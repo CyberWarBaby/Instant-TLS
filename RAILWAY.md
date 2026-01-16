@@ -47,6 +47,14 @@ The application consists of:
    PORT=8081
    JWT_SECRET=<generate-a-secure-random-string>
    ENV=production
+   CORS_ORIGINS=https://<your-web-service>.railway.app
+   ```
+   
+   Replace `<your-web-service>` with the domain Railway assigns to your Web service.
+   
+   **Note**: You can add multiple origins separated by commas:
+   ```
+   CORS_ORIGINS=https://your-web.railway.app,https://your-custom-domain.com
    ```
 
 5. Click "Deploy"
@@ -109,6 +117,7 @@ railway up
 | `PORT` | Server port | `8081` |
 | `JWT_SECRET` | Secret key for JWT tokens | `your-super-secret-jwt-key` |
 | `ENV` | Environment mode | `production` |
+| `CORS_ORIGINS` | Allowed CORS origins (comma-separated) | `https://web.railway.app` |
 
 **Note**: Railway will automatically provide `DATABASE_URL` when you add the PostgreSQL plugin. Reference it as `${{Postgres.DATABASE_URL}}`.
 
@@ -168,6 +177,12 @@ railway run ./api migrate up
 
 **Problem**: Web can't connect to API
 - **Solution**: Double-check that `NEXT_PUBLIC_API_URL` is set to your API service's public URL
+
+**Problem**: CORS errors when Web tries to access API
+- **Solution**: Make sure you've set `CORS_ORIGINS` on the API service to include your Web service URL:
+  ```
+  CORS_ORIGINS=https://your-web-service.railway.app
+  ```
 
 ### Port Issues
 

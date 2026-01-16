@@ -87,19 +87,29 @@ func main() {
 
 	r := gin.Default()
 
-	// CORS - Allow all local development origins
+	// CORS - Use configured origins from environment
+	allowedOrigins := cfg.CORSOrigins
+	// Add localhost origins for development
+	if cfg.Env == "development" {
+		allowedOrigins = append(allowedOrigins, "http://localhost:3000", "https://localhost:3000", "http://127.0.0.1:3000")
+	}
+	
 	corsConfig := cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000", "https://localhost:3000", "http://127.0.0.1:3000"},
+		AllowOrigins:     allowedOrigins,
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 		AllowOriginFunc: func(origin string) bool {
-			// Allow any .local domain for development
+			// In production, rely on AllowOrigins list
+			if cfg.Env == "production" {
+				return false
+			}
+			// In development, allow any .local domain
 			if strings.HasSuffix(origin, ".local") || strings.HasSuffix(origin, ".local:443") {
 				return true
 			}
-			// Allow localhost on any port
+			// Allow localhost on any port in development
 			if strings.HasPrefix(origin, "http://localhost") || strings.HasPrefix(origin, "https://localhost") {
 				return true
 			}
