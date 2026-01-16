@@ -20,9 +20,15 @@ func Load() *Config {
 		corsOrigins = "http://localhost:3000"
 	}
 
+	// Railway sets PORT, local dev uses API_PORT
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = getEnv("API_PORT", "8081")
+	}
+
 	return &Config{
-		DatabaseURL: getEnv("DATABASE_URL", "postgres://instanttls:instanttls@localhost:5432/instanttls?sslmode=disable"),
-		Port:        getEnv("API_PORT", "8081"),
+		DatabaseURL: getEnv("DATABASE_URL", "postgres://instanttls:instanttls@localhost:5433/instanttls?sslmode=disable"),
+		Port:        port,
 		Host:        getEnv("API_HOST", "0.0.0.0"),
 		JWTSecret:   getEnv("JWT_SECRET", "your-super-secret-jwt-key-change-in-production"),
 		CORSOrigins: strings.Split(corsOrigins, ","),

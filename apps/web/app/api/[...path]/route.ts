@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8081'
+// Use API_URL for server-side proxy (not NEXT_PUBLIC_ since this runs on server only)
+const API_URL = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8081'
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
   return proxyRequest(request, await params)
