@@ -1,0 +1,55 @@
+# Railway ignore file
+# This file tells Railway which files to ignore during deployment
+
+# Development files
+.env
+.env.local
+.env.*.local
+
+# Git
+.git
+.gitignore
+
+# Documentation (not needed for runtime, except RAILWAY.md)
+README.md
+CONTRIBUTING.md
+LICENSE.md
+CHANGELOG.md
+
+# Development directories
+.vscode
+.idea
+.DS_Store
+
+# Test files
+*_test.go
+*test.js
+__tests__
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# CI/CD
+.github
+
+# Local development
+bin/
+tmp/
+temp/
+*.log
+
+# Dependencies (will be rebuilt)
+node_modules/
+vendor/
+
+# Build artifacts (will be rebuilt)
+.next/
+dist/
+build/
+out/
+
+# Database
+*.db
+*.sqlite
+infra/

@@ -6,6 +6,10 @@ bin/
 *.so
 *.dylib
 
+# Go build outputs
+apps/api/api
+cli/instanttls
+
 # Test binary
 *.test
 

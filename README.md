@@ -290,6 +290,22 @@ sudo update-ca-trust
 2. Set `security.enterprise_roots.enabled` to `true`
 3. Restart Firefox
 
+## Deployment
+
+### Railway
+
+InstantTLS can be easily deployed to Railway. See [RAILWAY.md](./RAILWAY.md) for complete deployment instructions.
+
+**Quick Summary:**
+- This is a monorepo with two separate services (API and Web)
+- Deploy each service separately by setting the root directory in Railway:
+  - API: `apps/api`
+  - Web: `apps/web`
+- Add a PostgreSQL database via Railway plugins
+- Configure environment variables for each service
+
+For detailed step-by-step instructions, see [RAILWAY.md](./RAILWAY.md).
+
 ## License
 
 MIT
