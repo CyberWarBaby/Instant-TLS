@@ -4,16 +4,57 @@
 
 InstantTLS is a developer tool that generates trusted local certificates, installs them in your OS trust store, and manages your development SSL/TLS workflow.
 
+## 🚀 Quick Start (3 Commands!)
+
+```bash
+# 1. Install the CLI
+go install github.com/CyberWarBaby/Instant-TLS/cli/cmd/instanttls@latest
+
+# 2. One-time setup (login + create CA + trust in all browsers)
+sudo instanttls setup
+
+# 3. Generate a certificate
+instanttls cert myapp.local
+```
+
+That's it! Your browser will now show a **green lock** 🔒 with zero warnings.
+
 ## Features
 
 - 🔐 **Local CA Generation** - Create a trusted Certificate Authority on your machine
 - 🌐 **Wildcard Certificates** - Generate certs like `*.local.test` for all your local domains
 - 💻 **Cross-Platform** - Works on macOS, Linux, and Windows
+- 🔄 **Auto Trust** - Automatically installs CA in Chrome, Firefox, and system store
 - ☁️ **Cloud Licensing** - Free/Pro/Team plans with account management
 - 🎨 **Beautiful CLI** - Polished terminal experience with colors and spinners
 - 🖥️ **Web Dashboard** - Modern Next.js dashboard for token and account management
 
-## Quick Start
+## Using the Certificate
+
+After running `instanttls cert myapp.local`, use the certificates in your project:
+
+**Node.js:**
+```javascript
+const https = require('https');
+const fs = require('fs');
+const path = require('path');
+
+const options = {
+  key: fs.readFileSync(path.join(process.env.HOME, '.instanttls/certs/myapp.local/key.pem')),
+  cert: fs.readFileSync(path.join(process.env.HOME, '.instanttls/certs/myapp.local/cert.pem'))
+};
+
+https.createServer(options, (req, res) => {
+  res.end('Hello HTTPS!');
+}).listen(443);
+```
+
+**Don't forget to add your domain to /etc/hosts:**
+```bash
+echo "127.0.0.1 myapp.local" | sudo tee -a /etc/hosts
+```
+
+## Development Setup
 
 ### Prerequisites
 
@@ -36,7 +77,7 @@ make dev
 ```
 
 This starts:
-- PostgreSQL on port 5432
+- PostgreSQL on port 5433
 - Go API on port 8081
 - Next.js web on port 3000
 
@@ -47,17 +88,14 @@ This starts:
 3. Go to Tokens page and create a Personal Access Token
 4. Copy the token (shown only once!)
 
-### 4. Login via CLI
+### 4. Use the CLI
 
 ```bash
 # Build the CLI
 make build-cli
 
-# Login with your token
-./bin/instanttls login
-
-# Initialize local CA
-./bin/instanttls init
+# One-time setup
+sudo ./bin/instanttls setup
 
 # Generate a wildcard certificate
 ./bin/instanttls cert "*.local.test"
