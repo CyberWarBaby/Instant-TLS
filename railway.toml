@@ -1,0 +1,16 @@
+# Railway.toml - Root configuration for InstantTLS monorepo
+#
+# This is a monorepo with multiple services. Railway cannot automatically
+# detect which service to deploy from the root.
+#
+# To deploy this application on Railway:
+#
+# 1. Create separate services for each app:
+#    - API Service: Set root directory to "apps/api"
+#    - Web Service: Set root directory to "apps/web"
+#
+# 2. See RAILWAY.md for complete deployment instructions
+#
+# Note: This file serves as documentation. Railway deployment must be 
+# configured in the Railway dashboard by setting the root directory for
+# each service.
