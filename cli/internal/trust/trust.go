@@ -116,7 +116,50 @@ For other distributions, consult your documentation.
 		return fmt.Errorf("failed to update CA certificates: %w", err)
 	}
 
+	// Also install to Chrome/Chromium NSS database
+	installChromeNSS(certPath)
+
 	return nil
+}
+
+// installChromeNSS installs the CA to Chrome/Chromium's NSS database on Linux
+func installChromeNSS(certPath string) {
+	// Check if certutil is available
+	if _, err := exec.LookPath("certutil"); err != nil {
+		pterm.Println()
+		pterm.Warning.Println("Chrome/Chromium uses its own certificate store.")
+		pterm.Info.Println("Install libnss3-tools and run:")
+		pterm.Println()
+		pterm.DefaultBox.Println(`sudo apt install libnss3-tools
+certutil -d sql:$HOME/.pki/nssdb -A -t "C,," -n "InstantTLS Local CA" -i ` + certPath)
+		return
+	}
+
+	// Get home directory
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		return
+	}
+
+	nssDB := filepath.Join(homeDir, ".pki", "nssdb")
+	
+	// Check if NSS database exists
+	if _, err := os.Stat(nssDB); os.IsNotExist(err) {
+		// Create the directory
+		os.MkdirAll(nssDB, 0700)
+	}
+
+	pterm.Println()
+	pterm.Info.Println("Adding CA to Chrome/Chromium certificate store...")
+
+	cmd := exec.Command("certutil", "-d", "sql:"+nssDB, "-A", "-t", "C,,", "-n", "InstantTLS Local CA", "-i", certPath)
+	if err := cmd.Run(); err != nil {
+		pterm.Warning.Printf("Failed to add to Chrome store: %v\n", err)
+		return
+	}
+
+	pterm.Success.Println("CA added to Chrome/Chromium!")
+	pterm.FgYellow.Println("  ⚠️  Restart Chrome for changes to take effect")
 }
 
 func installWindows(certPath string) error {

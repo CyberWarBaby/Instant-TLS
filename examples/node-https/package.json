@@ -1,0 +1,12 @@
+{
+  "name": "instanttls-example",
+  "version": "1.0.0",
+  "description": "Example Node.js HTTPS server using InstantTLS certificates",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["https", "tls", "instanttls", "local-dev"],
+  "license": "MIT"
+}

@@ -91,6 +91,11 @@ func IsLoggedIn() bool {
 	return cfg.Token != ""
 }
 
+func Exists() bool {
+	_, err := os.Stat(GetConfigPath())
+	return err == nil
+}
+
 func MustLoad() *Config {
 	cfg, err := Load()
 	if err != nil || cfg == nil {

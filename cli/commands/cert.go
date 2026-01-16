@@ -12,18 +12,21 @@ import (
 )
 
 var certCmd = &cobra.Command{
-	Use:   "cert <domain>",
-	Short: "Generate a certificate for a domain",
-	Long: `Generate a TLS certificate for a domain or wildcard pattern.
+	Use:   "cert <domain> [additional-domains...]",
+	Short: "Generate a certificate for one or more domains",
+	Long: `Generate a TLS certificate for one or more domains.
 
 The certificate will be signed by your local CA. Make sure you have run
 'instanttls init' first.
 
+localhost and 127.0.0.1 are automatically included as Subject Alternative Names (SANs).
+
 Examples:
-  instanttls cert "*.local.test"     # Wildcard certificate
-  instanttls cert "myapp.local"      # Single domain
-  instanttls cert "localhost"        # Localhost certificate`,
-	Args: cobra.ExactArgs(1),
+  instanttls cert myapp.local                    # Single domain + localhost
+  instanttls cert myapp.local api.local          # Multiple domains
+  instanttls cert "*.local.dev"                  # Wildcard certificate
+  instanttls cert myapp.local localhost:3000     # With port (port ignored in cert)`,
+	Args: cobra.MinimumNArgs(1),
 	Run:  runCert,
 }
 
@@ -32,7 +35,8 @@ func init() {
 }
 
 func runCert(cmd *cobra.Command, args []string) {
-	domain := args[0]
+	domains := args
+	primaryDomain := domains[0]
 
 	cfg, err := config.Load()
 	if err != nil || cfg == nil || cfg.Token == "" {
@@ -53,7 +57,7 @@ func runCert(cmd *cobra.Command, args []string) {
 	}
 
 	// Check plan limits
-	isWildcard := strings.HasPrefix(domain, "*.")
+	isWildcard := strings.HasPrefix(primaryDomain, "*.")
 
 	if isWildcard && cfg.Plan == "free" {
 		// Check license from API
@@ -77,17 +81,18 @@ func runCert(cmd *cobra.Command, args []string) {
 		}
 	}
 
-	// Generate certificate
-	spinner, _ := pterm.DefaultSpinner.Start(fmt.Sprintf("Generating certificate for %s...", domain))
+	// Generate certificate with multiple domains
+	domainsDisplay := strings.Join(domains, ", ")
+	spinner, _ := pterm.DefaultSpinner.Start(fmt.Sprintf("Generating certificate for %s...", domainsDisplay))
 
-	certDir, err := cert.GenerateCert(domain)
+	certDir, err := cert.GenerateCertMulti(domains)
 	if err != nil {
 		spinner.Fail("Failed to generate certificate")
 		printError(err.Error())
 		return
 	}
 
-	spinner.Success(fmt.Sprintf("Certificate generated for %s", domain))
+	spinner.Success(fmt.Sprintf("Certificate generated for %s", domainsDisplay))
 	pterm.Println()
 
 	pterm.DefaultBox.WithTitle("📁 Certificate Files").
@@ -95,7 +100,9 @@ func runCert(cmd *cobra.Command, args []string) {
 		Println(fmt.Sprintf(`
   Certificate: %s/cert.pem
   Private Key: %s/key.pem
-`, certDir, certDir))
+  
+  Domains: %s + localhost + 127.0.0.1
+`, certDir, certDir, domainsDisplay))
 
 	pterm.Println()
 	pterm.DefaultSection.Println("Usage Examples")
@@ -130,7 +137,7 @@ https.createServer(options, (req, res) => {
     location / {
         # your config here
     }
-}`, domain, certDir, certDir))
+}`, primaryDomain, certDir, certDir))
 
 	pterm.Println()
 
@@ -140,7 +147,7 @@ https.createServer(options, (req, res) => {
     tls %s/cert.pem %s/key.pem
 
     respond "Hello HTTPS!"
-}`, strings.TrimPrefix(domain, "*."), certDir, certDir))
+}`, strings.TrimPrefix(primaryDomain, "*."), certDir, certDir))
 
 	pterm.Println()
 }

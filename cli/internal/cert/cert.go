@@ -238,6 +238,113 @@ func GenerateCert(domain string) (string, error) {
 	return certDir, nil
 }
 
+// GenerateCertMulti creates a certificate for multiple domains with localhost included
+func GenerateCertMulti(domains []string) (string, error) {
+	if !CAExists() {
+		return "", fmt.Errorf("CA not found. Run 'instanttls init' first")
+	}
+
+	caCert, caKey, err := LoadCA()
+	if err != nil {
+		return "", err
+	}
+
+	// Use first domain for directory and common name
+	primaryDomain := domains[0]
+	sanitizedDomain := sanitizeDomain(primaryDomain)
+	certDir := filepath.Join(config.GetCertsDir(), sanitizedDomain)
+	if err := os.MkdirAll(certDir, 0700); err != nil {
+		return "", fmt.Errorf("failed to create cert directory: %w", err)
+	}
+
+	// Generate private key
+	privateKey, err := rsa.GenerateKey(rand.Reader, KeySize)
+	if err != nil {
+		return "", fmt.Errorf("failed to generate private key: %w", err)
+	}
+
+	// Create certificate template
+	serialNumber, err := rand.Int(rand.Reader, new(big.Int).Lsh(big.NewInt(1), 128))
+	if err != nil {
+		return "", fmt.Errorf("failed to generate serial number: %w", err)
+	}
+
+	template := &x509.Certificate{
+		SerialNumber: serialNumber,
+		Subject: pkix.Name{
+			Organization: []string{"InstantTLS"},
+			CommonName:   primaryDomain,
+		},
+		NotBefore:             time.Now(),
+		NotAfter:              time.Now().AddDate(0, 0, CertValidityDays),
+		KeyUsage:              x509.KeyUsageKeyEncipherment | x509.KeyUsageDigitalSignature,
+		ExtKeyUsage:           []x509.ExtKeyUsage{x509.ExtKeyUsageServerAuth},
+		BasicConstraintsValid: true,
+	}
+
+	// Build DNS names list - always include localhost
+	dnsNames := make(map[string]bool)
+	for _, domain := range domains {
+		// Strip any port numbers
+		host := domain
+		if idx := strings.Index(domain, ":"); idx != -1 {
+			host = domain[:idx]
+		}
+		dnsNames[host] = true
+		// For wildcards, also add the base domain
+		if strings.HasPrefix(host, "*.") {
+			baseDomain := strings.TrimPrefix(host, "*.")
+			dnsNames[baseDomain] = true
+		}
+	}
+	// Always add localhost
+	dnsNames["localhost"] = true
+
+	// Convert to slice
+	for dns := range dnsNames {
+		template.DNSNames = append(template.DNSNames, dns)
+	}
+
+	// Always add 127.0.0.1 and ::1 as IP SANs
+	template.IPAddresses = []net.IP{
+		net.ParseIP("127.0.0.1"),
+		net.ParseIP("::1"),
+	}
+
+	// Sign the certificate
+	derBytes, err := x509.CreateCertificate(rand.Reader, template, caCert, &privateKey.PublicKey, caKey)
+	if err != nil {
+		return "", fmt.Errorf("failed to create certificate: %w", err)
+	}
+
+	// Save certificate
+	certPath := filepath.Join(certDir, "cert.pem")
+	certFile, err := os.Create(certPath)
+	if err != nil {
+		return "", fmt.Errorf("failed to create certificate file: %w", err)
+	}
+	defer certFile.Close()
+
+	if err := pem.Encode(certFile, &pem.Block{Type: "CERTIFICATE", Bytes: derBytes}); err != nil {
+		return "", fmt.Errorf("failed to write certificate: %w", err)
+	}
+
+	// Save private key
+	keyPath := filepath.Join(certDir, "key.pem")
+	keyFile, err := os.OpenFile(keyPath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
+	if err != nil {
+		return "", fmt.Errorf("failed to create key file: %w", err)
+	}
+	defer keyFile.Close()
+
+	keyBytes := x509.MarshalPKCS1PrivateKey(privateKey)
+	if err := pem.Encode(keyFile, &pem.Block{Type: "RSA PRIVATE KEY", Bytes: keyBytes}); err != nil {
+		return "", fmt.Errorf("failed to write key: %w", err)
+	}
+
+	return certDir, nil
+}
+
 // ListCerts returns all generated certificates
 func ListCerts() ([]CertInfo, error) {
 	certsDir := config.GetCertsDir()
