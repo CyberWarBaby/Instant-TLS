@@ -130,14 +130,6 @@ make migrate-down
 make build-cli
 ```
 
-## Demo Credentials
-
-For local development, a demo user is seeded:
-
-- **Email:** demo@instanttls.dev
-- **Password:** demo1234
-- **Plan:** pro
-
 ## API Endpoints
 
 ### Auth
