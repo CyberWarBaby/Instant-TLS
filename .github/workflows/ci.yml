@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  api:
+    name: API Tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: instanttls
+          POSTGRES_PASSWORD: instanttls
+          POSTGRES_DB: instanttls
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Run API tests
+        working-directory: apps/api
+        env:
+          DATABASE_URL: postgres://instanttls:instanttls@localhost:5432/instanttls?sslmode=disable
+        run: |
+          go mod download
+          go test ./...
+
+  cli:
+    name: CLI Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+
+      - name: Run CLI tests
+        working-directory: cli
+        run: |
+          go mod download
+          go test ./...
+
+      - name: Build CLI
+        working-directory: cli
+        run: go build -o ../bin/instanttls .
+
+  web:
+    name: Web Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: apps/web
+        run: npm install
+
+      - name: Build
+        working-directory: apps/web
+        run: npm run build
