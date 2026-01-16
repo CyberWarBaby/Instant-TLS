@@ -48,8 +48,19 @@ func runSetup(cmd *cobra.Command, args []string) {
 		Println("🚀 InstantTLS Setup")
 	pterm.Println()
 
+	// Step 0: Install system-wide FIRST
+	pterm.DefaultSection.Println("Step 1/4: Install CLI System-Wide")
+
+	spinner, _ := pterm.DefaultSpinner.Start("Adding instanttls to /usr/local/bin...")
+	if err := installToPath(); err != nil {
+		spinner.Warning(fmt.Sprintf("PATH: %v (you may need to add Go bin to PATH manually)", err))
+	} else {
+		spinner.Success("instanttls is now available system-wide")
+	}
+
 	// Check if already set up
 	if config.Exists() && cert.CAExists() {
+		pterm.Println()
 		pterm.Warning.Println("InstantTLS is already set up!")
 		pterm.Println()
 		pterm.Info.Println("To generate certificates, run:")
@@ -60,8 +71,9 @@ func runSetup(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	// Step 1: Login
-	pterm.DefaultSection.Println("Step 1/3: Authentication")
+	// Step 2: Login
+	pterm.Println()
+	pterm.DefaultSection.Println("Step 2/4: Authentication")
 
 	reader := bufio.NewReader(os.Stdin)
 
@@ -91,7 +103,7 @@ func runSetup(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	spinner, _ := pterm.DefaultSpinner.Start("Validating token...")
+	spinner, _ = pterm.DefaultSpinner.Start("Validating token...")
 	client := api.NewClient(apiBaseURL, token)
 	user, err := client.Me()
 	if err != nil {
@@ -118,9 +130,9 @@ func runSetup(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	// Step 2: Generate CA
+	// Step 3: Generate CA
 	pterm.Println()
-	pterm.DefaultSection.Println("Step 2/3: Create Certificate Authority")
+	pterm.DefaultSection.Println("Step 3/4: Create Certificate Authority")
 
 	spinner, _ = pterm.DefaultSpinner.Start("Generating CA certificate...")
 	if err := cert.GenerateCA(); err != nil {
@@ -130,9 +142,9 @@ func runSetup(cmd *cobra.Command, args []string) {
 	}
 	spinner.Success("CA certificate created")
 
-	// Step 3: Install in trust stores
+	// Step 4: Install in trust stores
 	pterm.Println()
-	pterm.DefaultSection.Println("Step 3/4: Install in Trust Stores")
+	pterm.DefaultSection.Println("Step 4/4: Install in Trust Stores")
 
 	caPath := filepath.Join(config.GetCADir(), "ca.crt")
 
@@ -158,17 +170,6 @@ func runSetup(cmd *cobra.Command, args []string) {
 		spinner.Warning(fmt.Sprintf("Firefox: %v", err))
 	} else {
 		spinner.Success("Installed in Firefox")
-	}
-
-	// Step 4: Add to PATH
-	pterm.Println()
-	pterm.DefaultSection.Println("Step 4/4: Make CLI Available System-Wide")
-
-	spinner, _ = pterm.DefaultSpinner.Start("Adding instanttls to system PATH...")
-	if err := installToPath(); err != nil {
-		spinner.Warning(fmt.Sprintf("PATH: %v (you may need to add Go bin to PATH manually)", err))
-	} else {
-		spinner.Success("instanttls is now available system-wide")
 	}
 
 	// Done!
