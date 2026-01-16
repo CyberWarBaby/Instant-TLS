@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/instanttls/cli/internal/config"
+	"github.com/CyberWarBaby/Instant-TLS/cli/internal/config"
 	"github.com/pterm/pterm"
 	"github.com/spf13/cobra"
 )

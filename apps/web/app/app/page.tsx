@@ -132,8 +132,8 @@ export default function DashboardPage() {
               </p>
               <div className="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm overflow-x-auto">
                 <div className="flex items-center justify-between">
-                  <code>go install github.com/instanttls/cli@latest</code>
-                  <CopyButton text="go install github.com/instanttls/cli@latest" />
+                  <code>go install github.com/CyberWarBaby/Instant-TLS/cli@latest</code>
+                  <CopyButton text="go install github.com/CyberWarBaby/Instant-TLS/cli@latest" />
                 </div>
               </div>
             </div>

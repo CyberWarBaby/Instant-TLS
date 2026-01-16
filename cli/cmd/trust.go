@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/instanttls/cli/internal/trust"
+	"github.com/CyberWarBaby/Instant-TLS/cli/internal/trust"
 	"github.com/pterm/pterm"
 	"github.com/spf13/cobra"
 )

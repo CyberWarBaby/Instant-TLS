@@ -62,7 +62,7 @@ export default function HomePage() {
             </div>
             <div className="space-y-2 text-green-400">
               <p><span className="text-gray-500"># Install CLI (coming soon - for now, build from source)</span></p>
-              <p>$ go install github.com/instanttls/cli@latest</p>
+              <p>$ go install github.com/CyberWarBaby/Instant-TLS/cli@latest</p>
               <p>&nbsp;</p>
               <p><span className="text-gray-500"># Login with your token</span></p>
               <p>$ instanttls login</p>

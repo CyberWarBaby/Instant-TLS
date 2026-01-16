@@ -4,10 +4,10 @@ import (
 	"os"
 	"runtime"
 
-	"github.com/instanttls/cli/internal/api"
-	"github.com/instanttls/cli/internal/cert"
-	"github.com/instanttls/cli/internal/config"
-	"github.com/instanttls/cli/internal/trust"
+	"github.com/CyberWarBaby/Instant-TLS/cli/internal/api"
+	"github.com/CyberWarBaby/Instant-TLS/cli/internal/cert"
+	"github.com/CyberWarBaby/Instant-TLS/cli/internal/config"
+	"github.com/CyberWarBaby/Instant-TLS/cli/internal/trust"
 	"github.com/pterm/pterm"
 	"github.com/spf13/cobra"
 )

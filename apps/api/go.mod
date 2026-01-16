@@ -1,4 +1,4 @@
-module github.com/instanttls/api
+module github.com/CyberWarBaby/Instant-TLS/apps/api
 
 go 1.21
 

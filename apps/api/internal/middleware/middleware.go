@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/instanttls/api/internal/config"
-	"github.com/instanttls/api/internal/models"
+	"github.com/CyberWarBaby/Instant-TLS/apps/api/internal/config"
+	"github.com/CyberWarBaby/Instant-TLS/apps/api/internal/models"
 	"github.com/jmoiron/sqlx"
 )
 

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/instanttls/cli/internal/api"
-	"github.com/instanttls/cli/internal/cert"
-	"github.com/instanttls/cli/internal/config"
+	"github.com/CyberWarBaby/Instant-TLS/cli/internal/api"
+	"github.com/CyberWarBaby/Instant-TLS/cli/internal/cert"
+	"github.com/CyberWarBaby/Instant-TLS/cli/internal/config"
 	"github.com/pterm/pterm"
 	"github.com/spf13/cobra"
 )

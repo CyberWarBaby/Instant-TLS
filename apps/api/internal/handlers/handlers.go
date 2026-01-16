@@ -9,8 +9,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/instanttls/api/internal/config"
-	"github.com/instanttls/api/internal/models"
+	"github.com/CyberWarBaby/Instant-TLS/apps/api/internal/config"
+	"github.com/CyberWarBaby/Instant-TLS/apps/api/internal/models"
 	"github.com/jmoiron/sqlx"
 	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"

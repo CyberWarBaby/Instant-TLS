@@ -5,12 +5,12 @@ import (
 	"log"
 	"os"
 
-	"github.com/instanttls/api/internal/config"
-	"github.com/instanttls/api/internal/database"
-	"github.com/instanttls/api/internal/handlers"
-	"github.com/instanttls/api/internal/middleware"
-	"github.com/instanttls/api/internal/migrations"
-	"github.com/instanttls/api/internal/seed"
+	"github.com/CyberWarBaby/Instant-TLS/apps/api/internal/config"
+	"github.com/CyberWarBaby/Instant-TLS/apps/api/internal/database"
+	"github.com/CyberWarBaby/Instant-TLS/apps/api/internal/handlers"
+	"github.com/CyberWarBaby/Instant-TLS/apps/api/internal/middleware"
+	"github.com/CyberWarBaby/Instant-TLS/apps/api/internal/migrations"
+	"github.com/CyberWarBaby/Instant-TLS/apps/api/internal/seed"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"

@@ -15,7 +15,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/instanttls/cli/internal/config"
+	"github.com/CyberWarBaby/Instant-TLS/cli/internal/config"
 )
 
 const (

@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/instanttls/cli/cmd"
+	"github.com/CyberWarBaby/Instant-TLS/cli/cmd"
 )
 
 func main() {
