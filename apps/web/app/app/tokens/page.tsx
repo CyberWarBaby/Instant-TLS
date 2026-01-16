@@ -124,28 +124,28 @@ export default function TokensPage() {
   }
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 sm:space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Personal Access Tokens</h1>
-          <p className="text-muted-foreground mt-1">
+          <h1 className="text-2xl sm:text-3xl font-bold">Access Tokens</h1>
+          <p className="text-muted-foreground mt-1 text-sm sm:text-base">
             Manage tokens for CLI authentication
           </p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="gap-2">
+            <Button className="gap-2 w-full sm:w-auto">
               <Plus className="h-4 w-4" />
               Create Token
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="max-w-[95vw] sm:max-w-lg">
             {createdToken ? (
               <>
                 <DialogHeader>
-                  <DialogTitle>Token Created Successfully</DialogTitle>
-                  <DialogDescription>
-                    Copy your token now. You won't be able to see it again!
+                  <DialogTitle className="text-lg">Token Created</DialogTitle>
+                  <DialogDescription className="text-sm">
+                    Copy your token now. You won't see it again!
                   </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4">
@@ -223,13 +223,13 @@ export default function TokensPage() {
       </Dialog>
 
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Key className="h-5 w-5" />
+        <CardHeader className="pb-2 sm:pb-4">
+          <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+            <Key className="h-4 w-4 sm:h-5 sm:w-5" />
             Your Tokens
           </CardTitle>
-          <CardDescription>
-            Tokens are used to authenticate the InstantTLS CLI
+          <CardDescription className="text-xs sm:text-sm">
+            Tokens authenticate the InstantTLS CLI
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -239,12 +239,12 @@ export default function TokensPage() {
             </div>
           ) : tokens.length === 0 ? (
             <div className="text-center py-8">
-              <Key className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="font-medium mb-1">No tokens yet</h3>
-              <p className="text-sm text-muted-foreground mb-4">
+              <Key className="h-10 w-10 sm:h-12 sm:w-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="font-medium mb-1 text-sm sm:text-base">No tokens yet</h3>
+              <p className="text-xs sm:text-sm text-muted-foreground mb-4">
                 Create a token to authenticate the CLI
               </p>
-              <Button onClick={() => setDialogOpen(true)} className="gap-2">
+              <Button onClick={() => setDialogOpen(true)} className="gap-2" size="sm">
                 <Plus className="h-4 w-4" />
                 Create Token
               </Button>

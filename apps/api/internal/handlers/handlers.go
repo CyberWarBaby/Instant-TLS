@@ -7,10 +7,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"github.com/CyberWarBaby/Instant-TLS/apps/api/internal/config"
 	"github.com/CyberWarBaby/Instant-TLS/apps/api/internal/models"
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"
