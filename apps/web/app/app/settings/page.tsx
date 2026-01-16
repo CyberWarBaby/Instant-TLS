@@ -1,9 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { User as UserIcon, Mail, Calendar, Shield } from 'lucide-react'
+import { User as UserIcon, Mail, Calendar, Shield, ArrowRight } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import { api, User } from '@/lib/api'
+import Link from 'next/link'
 
 function PlanBadge({ plan }: { plan: string }) {
   const colors: Record<string, string> = {
@@ -98,25 +100,40 @@ export default function SettingsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Plan Details</CardTitle>
-          <CardDescription>Your current subscription</CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>Plan Details</CardTitle>
+              <CardDescription>Your current subscription</CardDescription>
+            </div>
+            <Link href="/app/pricing">
+              <Button variant="outline" size="sm">
+                Manage Plan
+                <ArrowRight className="h-4 w-4 ml-2" />
+              </Button>
+            </Link>
+          </div>
         </CardHeader>
         <CardContent>
           {user && (
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <div>
-                  <p className="font-medium capitalize">{user.plan} Plan</p>
-                  <p className="text-sm text-muted-foreground">
-                    {user.plan === 'free'
-                      ? '1 wildcard certificate'
-                      : user.plan === 'pro'
-                      ? 'Unlimited wildcard certificates'
-                      : 'Unlimited certificates + Team features'}
-                  </p>
+              <Link href="/app/pricing" className="block">
+                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+                  <div>
+                    <p className="font-medium capitalize">{user.plan} Plan</p>
+                    <p className="text-sm text-muted-foreground">
+                      {user.plan === 'free'
+                        ? '1 wildcard certificate'
+                        : user.plan === 'pro'
+                        ? 'Unlimited wildcard certificates'
+                        : 'Unlimited certificates + Team features'}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <PlanBadge plan={user.plan} />
+                    <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                  </div>
                 </div>
-                <PlanBadge plan={user.plan} />
-              </div>
+              </Link>
 
               {user.plan === 'pro' && (
                 <div className="p-4 bg-purple-50 border border-purple-100 rounded-lg">
@@ -149,12 +166,22 @@ export default function SettingsPage() {
               )}
 
               {user.plan === 'free' && (
-                <div className="p-4 bg-gray-100 border border-gray-200 rounded-lg">
-                  <p className="font-medium text-gray-900">Free Plan</p>
-                  <p className="text-sm text-gray-600 mt-1">
-                    You have access to 1 wildcard certificate. Contact support to upgrade.
-                  </p>
-                </div>
+                <Link href="/app/pricing" className="block">
+                  <div className="p-4 bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg hover:shadow-md transition-all cursor-pointer group">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-medium text-purple-900">🚀 Upgrade to Pro</p>
+                        <p className="text-sm text-purple-700 mt-1">
+                          Get unlimited certificates and priority support
+                        </p>
+                      </div>
+                      <Button size="sm" className="bg-purple-600 hover:bg-purple-700 group-hover:translate-x-1 transition-transform">
+                        Upgrade
+                        <ArrowRight className="h-4 w-4 ml-1" />
+                      </Button>
+                    </div>
+                  </div>
+                </Link>
               )}
             </div>
           )}

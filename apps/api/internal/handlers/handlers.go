@@ -154,6 +154,46 @@ func (h *Handler) GetUser(c *gin.Context) {
 	})
 }
 
+// UpdatePlan updates user's subscription plan
+func (h *Handler) UpdatePlan(c *gin.Context) {
+	user := c.MustGet("user").(models.User)
+
+	var req struct {
+		Plan string `json:"plan" binding:"required"`
+	}
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Validate plan
+	validPlans := map[string]bool{"free": true, "pro": true, "team": true}
+	if !validPlans[req.Plan] {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid plan. Must be 'free', 'pro', or 'team'"})
+		return
+	}
+
+	// Update plan in database
+	_, err := h.db.Exec(`UPDATE users SET plan = $1 WHERE id = $2`, req.Plan, user.ID)
+	if err != nil {
+		h.logger.Errorf("Failed to update plan: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update plan"})
+		return
+	}
+
+	// Get updated user
+	var updatedUser models.User
+	h.db.Get(&updatedUser, "SELECT * FROM users WHERE id = $1", user.ID)
+
+	c.JSON(http.StatusOK, models.UserResponse{
+		ID:        updatedUser.ID,
+		Email:     updatedUser.Email,
+		Plan:      updatedUser.Plan,
+		CreatedAt: updatedUser.CreatedAt,
+	})
+}
+
 // License returns user's license info
 func (h *Handler) License(c *gin.Context) {
 	user := c.MustGet("user").(models.User)

@@ -145,7 +145,12 @@ func main() {
 		}
 
 		// User routes (session auth for web)
-		v1.GET("/user", middleware.SessionAuth(cfg), h.GetUser)
+		user := v1.Group("/user")
+		user.Use(middleware.SessionAuth(cfg))
+		{
+			user.GET("", h.GetUser)
+			user.POST("/plan", h.UpdatePlan)
+		}
 	}
 
 	// Health check

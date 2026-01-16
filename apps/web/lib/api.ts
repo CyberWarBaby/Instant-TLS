@@ -77,6 +77,10 @@ class ApiClient {
     return this.request('GET', '/v1/user')
   }
 
+  async updatePlan(plan: string): Promise<User> {
+    return this.request('POST', '/v1/user/plan', { plan })
+  }
+
   async getTokens(): Promise<Token[]> {
     return this.request('GET', '/v1/tokens')
   }

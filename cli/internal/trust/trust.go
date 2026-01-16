@@ -142,7 +142,7 @@ certutil -d sql:$HOME/.pki/nssdb -A -t "C,," -n "InstantTLS Local CA" -i ` + cer
 	}
 
 	nssDB := filepath.Join(homeDir, ".pki", "nssdb")
-	
+
 	// Check if NSS database exists
 	if _, err := os.Stat(nssDB); os.IsNotExist(err) {
 		// Create the directory
