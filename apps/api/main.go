@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/CyberWarBaby/Instant-TLS/apps/api/internal/config"
 	"github.com/CyberWarBaby/Instant-TLS/apps/api/internal/database"
@@ -86,13 +87,27 @@ func main() {
 
 	r := gin.Default()
 
-	// CORS
+	// CORS - Allow all local development origins
 	corsConfig := cors.Config{
-		AllowOrigins:     cfg.CORSOrigins,
+		AllowOrigins:     []string{"http://localhost:3000", "https://localhost:3000", "http://127.0.0.1:3000"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
+		AllowOriginFunc: func(origin string) bool {
+			// Allow any .local domain for development
+			if strings.HasSuffix(origin, ".local") || strings.HasSuffix(origin, ".local:443") {
+				return true
+			}
+			// Allow localhost on any port
+			if strings.HasPrefix(origin, "http://localhost") || strings.HasPrefix(origin, "https://localhost") {
+				return true
+			}
+			if strings.HasPrefix(origin, "http://127.0.0.1") || strings.HasPrefix(origin, "https://127.0.0.1") {
+				return true
+			}
+			return false
+		},
 	}
 	r.Use(cors.New(corsConfig))
 
