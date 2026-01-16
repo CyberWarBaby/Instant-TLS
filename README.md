@@ -4,8 +4,14 @@
 
 InstantTLS is a developer tool that generates trusted local certificates, installs them in your OS trust store, and manages your development SSL/TLS workflow.
 
-## 🚀 Quick Start (3 Commands!)
+## 🚀 Quick Start (One Command!)
 
+```bash
+# Install everything with one command
+curl -fsSL https://raw.githubusercontent.com/CyberWarBaby/Instant-TLS/main/install.sh | bash
+```
+
+**Or manual install:**
 ```bash
 # 1. Install the CLI
 go install github.com/CyberWarBaby/Instant-TLS/cli/cmd/instanttls@latest

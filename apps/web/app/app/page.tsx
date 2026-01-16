@@ -132,12 +132,12 @@ export default function DashboardPage() {
             <div className="flex-1">
               <h3 className="font-medium">Install the CLI</h3>
               <p className="text-sm text-muted-foreground mb-3">
-                Install via Go (binary releases coming soon)
+                One command installs and makes it available system-wide
               </p>
-              <div className="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm overflow-x-auto">
+              <div className="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm overflow-x-auto space-y-2">
                 <div className="flex items-center justify-between">
-                  <code>go install github.com/CyberWarBaby/Instant-TLS/cli/cmd/instanttls@latest</code>
-                  <CopyButton text="go install github.com/CyberWarBaby/Instant-TLS/cli/cmd/instanttls@latest" />
+                  <code>curl -fsSL https://raw.githubusercontent.com/CyberWarBaby/Instant-TLS/main/install.sh | bash</code>
+                  <CopyButton text='curl -fsSL https://raw.githubusercontent.com/CyberWarBaby/Instant-TLS/main/install.sh | bash' />
                 </div>
               </div>
             </div>
@@ -149,9 +149,9 @@ export default function DashboardPage() {
               3
             </div>
             <div className="flex-1">
-              <h3 className="font-medium">One-Time Setup</h3>
+              <h3 className="font-medium">Run Setup</h3>
               <p className="text-sm text-muted-foreground mb-3">
-                Run with sudo - this does everything: login, creates CA, and trusts it in Chrome/Firefox
+                Creates CA, trusts in Chrome/Firefox, and configures everything
               </p>
               <div className="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm">
                 <div className="flex items-center justify-between">
@@ -160,7 +160,7 @@ export default function DashboardPage() {
                 </div>
               </div>
               <p className="text-xs text-muted-foreground mt-2">
-                You'll be prompted to enter your token during setup
+                You'll be prompted for your token during setup
               </p>
             </div>
           </div>
@@ -203,7 +203,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Step 6 */}
+          {/* Done */}
           <div className="flex gap-4">
             <div className="h-8 w-8 rounded-full bg-green-100 text-green-700 flex items-center justify-center text-sm font-medium">
               ✓
