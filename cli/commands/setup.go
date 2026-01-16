@@ -132,7 +132,7 @@ func runSetup(cmd *cobra.Command, args []string) {
 
 	// Step 3: Install in trust stores
 	pterm.Println()
-	pterm.DefaultSection.Println("Step 3/3: Install in Trust Stores")
+	pterm.DefaultSection.Println("Step 3/4: Install in Trust Stores")
 
 	caPath := filepath.Join(config.GetCADir(), "ca.crt")
 
@@ -160,6 +160,17 @@ func runSetup(cmd *cobra.Command, args []string) {
 		spinner.Success("Installed in Firefox")
 	}
 
+	// Step 4: Add to PATH
+	pterm.Println()
+	pterm.DefaultSection.Println("Step 4/4: Make CLI Available System-Wide")
+
+	spinner, _ = pterm.DefaultSpinner.Start("Adding instanttls to system PATH...")
+	if err := installToPath(); err != nil {
+		spinner.Warning(fmt.Sprintf("PATH: %v (you may need to add Go bin to PATH manually)", err))
+	} else {
+		spinner.Success("instanttls is now available system-wide")
+	}
+
 	// Done!
 	pterm.Println()
 	pterm.DefaultBox.WithTitle("🎉 Setup Complete!").
@@ -170,6 +181,9 @@ Your local CA is now trusted by all browsers.
 
 Generate certificates with:
   instanttls cert myapp.local
+
+Don't forget to add your domain to /etc/hosts:
+  echo "127.0.0.1 myapp.local" | sudo tee -a /etc/hosts
 
 Then use in your project:
   - Certificate: ~/.instanttls/certs/myapp.local/cert.pem
@@ -263,6 +277,40 @@ func installFirefoxTrust(caPath string) error {
 	// Fix ownership if running as sudo
 	if sudoUser := os.Getenv("SUDO_USER"); sudoUser != "" {
 		exec.Command("chown", "-R", sudoUser+":"+sudoUser, firefoxDir).Run()
+	}
+
+	return nil
+}
+
+func installToPath() error {
+	// Get the path to the current executable
+	execPath, err := os.Executable()
+	if err != nil {
+		return fmt.Errorf("cannot find executable path: %w", err)
+	}
+
+	// Resolve symlinks to get the real path
+	execPath, err = filepath.EvalSymlinks(execPath)
+	if err != nil {
+		return fmt.Errorf("cannot resolve executable path: %w", err)
+	}
+
+	// Target path in /usr/local/bin
+	targetPath := "/usr/local/bin/instanttls"
+
+	// Remove existing symlink if it exists
+	os.Remove(targetPath)
+
+	// Create symlink
+	if err := os.Symlink(execPath, targetPath); err != nil {
+		// If symlink fails, try copying
+		input, err := os.ReadFile(execPath)
+		if err != nil {
+			return fmt.Errorf("cannot read executable: %w", err)
+		}
+		if err := os.WriteFile(targetPath, input, 0755); err != nil {
+			return fmt.Errorf("cannot copy to /usr/local/bin: %w", err)
+		}
 	}
 
 	return nil

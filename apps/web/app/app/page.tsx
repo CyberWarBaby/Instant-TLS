@@ -32,10 +32,14 @@ function CopyButton({ text, label }: { text: string; label?: string }) {
   }
 
   return (
-    <Button variant="outline" size="sm" onClick={handleCopy} className="gap-2">
-      {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-      {label || (copied ? 'Copied!' : 'Copy')}
-    </Button>
+    <button 
+      onClick={handleCopy} 
+      className="flex items-center gap-1 px-2 py-1 text-gray-300 hover:text-white hover:bg-gray-700 rounded transition-colors"
+      title="Copy to clipboard"
+    >
+      {copied ? <Check className="h-4 w-4 text-green-400" /> : <Copy className="h-4 w-4" />}
+      <span className="text-xs">{copied ? 'Copied!' : 'Copy'}</span>
+    </button>
   )
 }
 
