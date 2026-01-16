@@ -171,25 +171,6 @@ export default function DashboardPage() {
               4
             </div>
             <div className="flex-1">
-              <h3 className="font-medium">Generate a Certificate</h3>
-              <p className="text-sm text-muted-foreground mb-3">
-                Create a certificate for your local domain
-              </p>
-              <div className="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm">
-                <div className="flex items-center justify-between">
-                  <code>instanttls cert myapp.local</code>
-                  <CopyButton text="instanttls cert myapp.local" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Step 5 */}
-          <div className="flex gap-4">
-            <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center text-sm font-medium">
-              5
-            </div>
-            <div className="flex-1">
               <h3 className="font-medium">Add Domain to /etc/hosts</h3>
               <p className="text-sm text-muted-foreground mb-3">
                 Point your domain to localhost
@@ -203,17 +184,53 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Done */}
+          {/* Step 5 - Serve */}
           <div className="flex gap-4">
-            <div className="h-8 w-8 rounded-full bg-green-100 text-green-700 flex items-center justify-center text-sm font-medium">
-              ✓
+            <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center text-sm font-medium">
+              5
             </div>
             <div className="flex-1">
-              <h3 className="font-medium">Done! Use Your Certificates</h3>
+              <h3 className="font-medium">Start HTTPS Proxy (Easiest Way!)</h3>
               <p className="text-sm text-muted-foreground mb-3">
-                Your certificates are ready to use
+                Run your app on HTTP, let InstantTLS handle HTTPS automatically
               </p>
-              <div className="bg-muted p-4 rounded-lg text-sm space-y-2">
+              <div className="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm space-y-3">
+                <div>
+                  <p className="text-gray-400 mb-1"># Your app runs on HTTP</p>
+                  <code className="text-blue-400">node app.js</code>
+                  <span className="text-gray-500 ml-2"># listening on localhost:3000</span>
+                </div>
+                <div>
+                  <p className="text-gray-400 mb-1"># InstantTLS proxies HTTPS → HTTP</p>
+                  <div className="flex items-center justify-between">
+                    <code>sudo instanttls serve myapp.local --to localhost:3000</code>
+                    <CopyButton text="sudo instanttls serve myapp.local --to localhost:3000" />
+                  </div>
+                </div>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">
+                Now https://myapp.local works with a green lock! No code changes needed.
+              </p>
+            </div>
+          </div>
+
+          {/* Alternative - Manual Cert */}
+          <div className="flex gap-4">
+            <div className="h-8 w-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-medium">
+              alt
+            </div>
+            <div className="flex-1">
+              <h3 className="font-medium text-muted-foreground">Alternative: Manual Certificate</h3>
+              <p className="text-sm text-muted-foreground mb-3">
+                If you prefer to configure TLS in your app directly
+              </p>
+              <div className="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm">
+                <div className="flex items-center justify-between">
+                  <code>instanttls cert myapp.local</code>
+                  <CopyButton text="instanttls cert myapp.local" />
+                </div>
+              </div>
+              <div className="bg-muted p-4 rounded-lg text-sm space-y-2 mt-3">
                 <p><strong>Certificate:</strong> <code>~/.instanttls/certs/myapp.local/cert.pem</code></p>
                 <p><strong>Private Key:</strong> <code>~/.instanttls/certs/myapp.local/key.pem</code></p>
               </div>
@@ -232,6 +249,20 @@ export default function DashboardPage() {
         </CardHeader>
         <CardContent>
           <div className="grid md:grid-cols-2 gap-4">
+            <div className="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm">
+              <p className="text-gray-400 mb-2"># Start HTTPS proxy</p>
+              <div className="flex items-center justify-between">
+                <code>instanttls serve myapp.local --to localhost:3000</code>
+                <CopyButton text="instanttls serve myapp.local --to localhost:3000" />
+              </div>
+            </div>
+            <div className="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm">
+              <p className="text-gray-400 mb-2"># Generate certificate</p>
+              <div className="flex items-center justify-between">
+                <code>instanttls cert myapp.local</code>
+                <CopyButton text="instanttls cert myapp.local" />
+              </div>
+            </div>
             <div className="bg-gray-900 text-gray-100 p-4 rounded-lg font-mono text-sm">
               <p className="text-gray-400 mb-2"># Check your setup</p>
               <div className="flex items-center justify-between">

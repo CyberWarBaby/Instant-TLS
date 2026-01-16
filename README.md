@@ -18,36 +18,55 @@ go install github.com/CyberWarBaby/Instant-TLS/cli/cmd/instanttls@latest
 
 # 2. One-time setup (login + create CA + trust in all browsers)
 sudo instanttls setup
-
-# 3. Generate a certificate
-instanttls cert myapp.local
 ```
 
 That's it! Your browser will now show a **green lock** 🔒 with zero warnings.
 
-## Features
+## 🔥 The Easiest Way: HTTPS Proxy
 
-- 🔐 **Local CA Generation** - Create a trusted Certificate Authority on your machine
-- 🌐 **Wildcard Certificates** - Generate certs like `*.local.test` for all your local domains
-- 💻 **Cross-Platform** - Works on macOS, Linux, and Windows
-- 🔄 **Auto Trust** - Automatically installs CA in Chrome, Firefox, and system store
-- ☁️ **Cloud Licensing** - Free/Pro/Team plans with account management
-- 🎨 **Beautiful CLI** - Polished terminal experience with colors and spinners
-- 🖥️ **Web Dashboard** - Modern Next.js dashboard for token and account management
+No code changes needed! Run your app on HTTP, let InstantTLS handle HTTPS:
 
-## Using the Certificate
+```bash
+# Add domain to hosts file
+echo "127.0.0.1 myapp.local" | sudo tee -a /etc/hosts
 
-After running `instanttls cert myapp.local`, use the certificates in your project:
+# Start your app on HTTP (any port)
+node app.js  # listening on localhost:3000
+
+# In another terminal, start the HTTPS proxy
+sudo instanttls serve myapp.local --to localhost:3000
+```
+
+Now visit **https://myapp.local** - green lock, no code changes! ✨
+
+### Serve Options
+
+```bash
+# Custom HTTPS port (no sudo needed)
+instanttls serve myapp.local --to localhost:3000 --port 8443
+
+# Access at https://myapp.local:8443
+```
+
+## Alternative: Manual Certificate
+
+If you prefer to configure TLS in your app directly:
+
+```bash
+# Generate certificate
+instanttls cert myapp.local
+```
+
+Then use the files in your project:
 
 **Node.js:**
 ```javascript
 const https = require('https');
 const fs = require('fs');
-const path = require('path');
 
 const options = {
-  key: fs.readFileSync(path.join(process.env.HOME, '.instanttls/certs/myapp.local/key.pem')),
-  cert: fs.readFileSync(path.join(process.env.HOME, '.instanttls/certs/myapp.local/cert.pem'))
+  key: fs.readFileSync(process.env.HOME + '/.instanttls/certs/myapp.local/key.pem'),
+  cert: fs.readFileSync(process.env.HOME + '/.instanttls/certs/myapp.local/cert.pem')
 };
 
 https.createServer(options, (req, res) => {
@@ -55,10 +74,20 @@ https.createServer(options, (req, res) => {
 }).listen(443);
 ```
 
-**Don't forget to add your domain to /etc/hosts:**
-```bash
-echo "127.0.0.1 myapp.local" | sudo tee -a /etc/hosts
-```
+**Certificate Locations:**
+- Certificate: `~/.instanttls/certs/myapp.local/cert.pem`
+- Private Key: `~/.instanttls/certs/myapp.local/key.pem`
+
+## Features
+
+- 🔐 **Local CA Generation** - Create a trusted Certificate Authority on your machine
+- 🌐 **Wildcard Certificates** - Generate certs like `*.local.test` for all your local domains
+- 💻 **Cross-Platform** - Works on macOS, Linux, and Windows
+- 🔄 **Auto Trust** - Automatically installs CA in Chrome, Firefox, and system store
+- 🚀 **HTTPS Proxy** - Zero-config HTTPS with `instanttls serve`
+- ☁️ **Cloud Licensing** - Free/Pro/Team plans with account management
+- 🎨 **Beautiful CLI** - Polished terminal experience with colors and spinners
+- 🖥️ **Web Dashboard** - Modern Next.js dashboard for token and account management
 
 ## Development Setup
 
