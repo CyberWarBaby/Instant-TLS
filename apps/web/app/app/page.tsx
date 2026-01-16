@@ -78,10 +78,15 @@ export default function DashboardPage() {
             <div>
               {user?.plan === 'free' ? (
                 <p className="text-sm text-muted-foreground">
-                  Free plan includes 1 wildcard certificate.{' '}
-                  <Link href="/pricing" className="text-primary hover:underline">
-                    Upgrade for more
-                  </Link>
+                  Free plan includes 1 wildcard certificate. Contact support to upgrade.
+                </p>
+              ) : user?.plan === 'pro' ? (
+                <p className="text-sm text-muted-foreground">
+                  ✓ Unlimited wildcard certificates • ✓ Priority support • ✓ HTTPS proxy
+                </p>
+              ) : user?.plan === 'team' ? (
+                <p className="text-sm text-muted-foreground">
+                  ✓ Everything in Pro • ✓ Team management • ✓ Shared certificates
                 </p>
               ) : (
                 <p className="text-sm text-muted-foreground">

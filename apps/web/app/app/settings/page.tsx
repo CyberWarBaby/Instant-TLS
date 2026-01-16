@@ -110,17 +110,49 @@ export default function SettingsPage() {
                   <p className="text-sm text-muted-foreground">
                     {user.plan === 'free'
                       ? '1 wildcard certificate'
-                      : 'Unlimited certificates'}
+                      : user.plan === 'pro'
+                      ? 'Unlimited wildcard certificates'
+                      : 'Unlimited certificates + Team features'}
                   </p>
                 </div>
                 <PlanBadge plan={user.plan} />
               </div>
 
-              {user.plan === 'free' && (
+              {user.plan === 'pro' && (
                 <div className="p-4 bg-purple-50 border border-purple-100 rounded-lg">
-                  <p className="font-medium text-purple-900">Upgrade to Pro</p>
-                  <p className="text-sm text-purple-700 mt-1">
-                    Get unlimited wildcard certificates and priority support.
+                  <div className="flex items-center gap-2 mb-2">
+                    <Shield className="h-5 w-5 text-purple-600" />
+                    <p className="font-medium text-purple-900">Pro Plan Active</p>
+                  </div>
+                  <ul className="text-sm text-purple-700 space-y-1">
+                    <li>✓ Unlimited wildcard certificates</li>
+                    <li>✓ Priority support</li>
+                    <li>✓ All CLI features</li>
+                    <li>✓ HTTPS reverse proxy (instanttls serve)</li>
+                  </ul>
+                </div>
+              )}
+
+              {user.plan === 'team' && (
+                <div className="p-4 bg-blue-50 border border-blue-100 rounded-lg">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Shield className="h-5 w-5 text-blue-600" />
+                    <p className="font-medium text-blue-900">Team Plan Active</p>
+                  </div>
+                  <ul className="text-sm text-blue-700 space-y-1">
+                    <li>✓ Everything in Pro</li>
+                    <li>✓ Team member management</li>
+                    <li>✓ Shared certificates</li>
+                    <li>✓ Admin dashboard</li>
+                  </ul>
+                </div>
+              )}
+
+              {user.plan === 'free' && (
+                <div className="p-4 bg-gray-100 border border-gray-200 rounded-lg">
+                  <p className="font-medium text-gray-900">Free Plan</p>
+                  <p className="text-sm text-gray-600 mt-1">
+                    You have access to 1 wildcard certificate. Contact support to upgrade.
                   </p>
                 </div>
               )}
